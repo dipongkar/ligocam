@@ -1,0 +1,12 @@
+To: talukderd@gmail.com, rmssrmss@gmail.com, radkins_h@ligo-wa.caltech.edu, mccarthy_r@ligo-wa.caltech.edu
+From: LigoCAM <dtalukder@ldas-grid.ligo-wa.caltech.edu>
+Reply-to: Dipongkar Talukder <talukderd@gmail.com>
+Subject: [LigoCAM] Disconnect alert for LHO PEM
+Alert epoch: 
+Jan 18 2017 17:15:02-17:23:34 UTC
+
+URL: 
+<https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/Projects/detchar/LigoCAM/PEM/pages/LigoCamHTML_1168796719.html>
+
+Disconnected channels:
+H1:PEM-EY_MAG_EBAY_SEIRACK_X_DQ
