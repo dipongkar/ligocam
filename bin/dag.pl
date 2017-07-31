@@ -31,11 +31,11 @@ chomp($year);
 
 
 $dagfile = sprintf "%s/ligocam_analysis.dag",$jobDir;
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_files.txt");
+open(jobfile, "< ${maindir}/channel_files.txt");
 open(dag,">$dagfile");
-while(<jobfile>) {      
+while(<jobfile>) {
     $line = $_;
-    chomp($line);                
+    chomp($line);
     if($line =~ m|(.*) (.*) (.*) (.*)|)
     {
     ($job,$chanlist,$ifo,$fmtype) = ($1,$2,$3,$4);
@@ -72,7 +72,9 @@ print consub "executable = $maindir/LigoCAM\n";
 print consub "log = /usr1/dtalukder/log/ligocam/ligocam_$TimeNow\_\$(frameType).log\n";
 print consub "error = $logsdir/ligocam_$TimeNow\_\$(channelList).err\n";
 print consub "output = $logsdir/ligocam_$TimeNow\_\$(channelList).out\n";
-print consub "arguments = \"--channel-list \$(channelList) --ifo \$(ifo) --frame_type \$(frameType) --cur-time \$(currTime) --cur-utctime \$(currTimeUTC)\"\n";
+print consub "arguments = \"--channel-list \$(channelList) --ifo \$(ifo)
+               --frame_type \$(frameType) --cur-time \$(currTime)
+               --cur-utctime \$(currTimeUTC)\"\n";
 print consub "request_memory = 3000\n";
 print consub "priority = 20\n";
 print consub "+LIGOCAM = True\n";
@@ -81,24 +83,27 @@ print consub "accounting_group_user = dipongkar.talukder\n";
 print consub "accounting_group = ligo.prod.o1.detchar.chan_mon.ligocam\n";
 print consub "queue";
 print consub "\n";
-close(consub);    
+close(consub);
 
 
-$makeImageDir = sprintf "python /home/dtalukder/Projects/detchar/LigoCAM/PEM/LigoCAM_preparedir.py --cur-time $TimeNow";
+$makeImageDir = sprintf "python ${maindir}/LigoCAM_preparedir.py
+                          --cur-time $TimeNow";
 system $makeImageDir;
 
-$Run_datafind_cur = sprintf "python /home/dtalukder/Projects/detchar/LigoCAM/PEM/LigoCAM_datafind.py --ifo $ifo --frame_type $fmtype --cache_group current --cur-time $TimeNow";
+$Run_datafind_cur = sprintf "python ${maindir}/LigoCAM_datafind.py --ifo $ifo
+                --frame_type $fmtype --cache_group current --cur-time $TimeNow";
 system $Run_datafind_cur;
 for ($k=0; $k<12; $k=$k+1) {
  $TimeRef = $TimeNow - 3600;
- $Run_datafind_ref = sprintf "python /home/dtalukder/Projects/detchar/LigoCAM/PEM/LigoCAM_datafind.py --ifo $ifo --frame_type $fmtype --cache_group reference --cur-time $TimeRef";
+ $Run_datafind_ref = sprintf "python ${maindir}/LigoCAM_datafind.py --ifo $ifo
+             --frame_type $fmtype --cache_group reference --cur-time $TimeRef";
  system $Run_datafind_ref;
  $TimeNow = $TimeRef;
 }
 
-$configdir = "/home/dtalukder/Projects/detchar/LigoCAM/PEM/config_files/";
+$configdir = "${maindir}/config_files/";
 $fullchan = sprintf "%s/fullchan.pl",$maindir;
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_files.txt");
+open(jobfile, "< ${maindir}/channel_files.txt");
 open(full,">$fullchan");
 print full "#! /usr/bin/perl \n\n";
 print full "\$copyfiles = \`cat ";
@@ -111,13 +116,13 @@ while(<jobfile>) {
     print full "$configdir$chanlist ";
 }
 }
-print full "\> /home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt\`\; \n\n";
+print full "\> ${maindir}/channel_full.txt\`\; \n\n";
 close(jobfile);
 close(full);
 
-$chmodit = sprintf "chmod +x /home/dtalukder/Projects/detchar/LigoCAM/PEM/fullchan.pl";
+$chmodit = sprintf "chmod +x ${maindir}/fullchan.pl";
 system $chmodit;
-$fullCommand = sprintf "/home/dtalukder/Projects/detchar/LigoCAM/PEM/fullchan.pl";
+$fullCommand = sprintf "${maindir}/fullchan.pl";
 @fullResult = ();
 @fullResult = `$fullCommand`;
 chomp(@fullResult);
@@ -125,9 +130,9 @@ chomp(@fullResult);
 $replace = ":";
 $replaceby = "_";
 $ppfile = sprintf "%s/ligocampp",$jobDir;
-$pathto = sprintf "/home/dtalukder/Projects/detchar/LigoCAM/PEM/results/";
+$pathto = sprintf "${maindir}/results/";
 $result = sprintf "Result";
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 open(pp,">$ppfile");
 print pp "#! /usr/bin/perl \n\n";
 print pp "\$TimeNow = $TimeNowSave\;\n\n";
@@ -145,7 +150,7 @@ while(<jobfile>) {
 print pp "\> $pathto$result$TimeNowSave.txt\`\; \n\n";
 close(jobfile);
 
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 print pp "\$deletefiles1 = \`rm -r ";
 while(<jobfile>) {
     $line = $_;
@@ -163,7 +168,7 @@ $disconn = sprintf "Disconnected";
 $disconnnow = sprintf "Disconnected_now";
 print pp "\$copyfiles2 = \`cat ";
 close(jobfile);
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -178,7 +183,7 @@ print pp "\> $pathto$disconnnow.txt\`\; \n\n";
 
 print pp "\$deletefiles2 = \`rm -r ";
 close(jobfile);
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -195,7 +200,7 @@ $daqf = sprintf "DAQfailure";
 $daqfnow = sprintf "DAQfailure_now";
 print pp "\$copyfiles3 = \`cat ";
 close(jobfile);
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -210,7 +215,7 @@ print pp "\> $pathto$daqfnow.txt\`\; \n\n";
 
 print pp "\$deletefiles3 = \`rm -r ";
 close(jobfile);
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -227,7 +232,7 @@ close(jobfile);
 
 $disconnmail = sprintf "Disconnmail";
 print pp "\$copyfiles4 = \`cat ";
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -242,7 +247,7 @@ print pp "\> $pathto$disconnmail.txt\`\; \n\n";
 
 print pp "\$deletefiles4 = \`rm -r ";
 close(jobfile);
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -258,7 +263,7 @@ print pp "\`\; \n\n";
 $daqfailmail = sprintf "DAQfailmail";
 print pp "\$copyfiles5 = \`cat ";
 close(jobfile);
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -273,7 +278,7 @@ print pp "\> $pathto$daqfailmail.txt\`\; \n\n";
 
 print pp "\$deletefiles5 = \`rm -r ";
 close(jobfile);
-open(jobfile, "</home/dtalukder/Projects/detchar/LigoCAM/PEM/channel_full.txt");
+open(jobfile, "< ${maindir}/channel_full.txt");
 while(<jobfile>) {
     $line = $_;
     chomp($line);
@@ -288,20 +293,29 @@ print pp "\`\; \n\n";
 close(jobfile);
 
 
-$PathTo = sprintf "/home/dtalukder/Projects/detchar/LigoCAM/PEM/results";
+$PathTo = sprintf "${maindir}/results";
 print pp "\$Movehistfile = sprintf \"python $maindir\/Movehistory_files.py\"\;\n";
 print pp "system \$Movehistfile\; \n\n";
-print pp "\$FindChanAlert = sprintf \"python $maindir\/FindChannelAlerts.py --file \'$PathTo\/Result\' --dir \'$pathto\' --name \'Result_sorted\' --cur-time \$TimeNow\"\;\n";
+print pp "\$FindChanAlert = sprintf \"python $maindir\/FindChannelAlerts.py
+          --file \'$PathTo\/Result\' --dir \'$pathto\' --name \'Result_sorted\'
+          --cur-time \$TimeNow\"\;\n";
 print pp "system \$FindChanAlert\; \n\n";
-print pp "\$FindChanAlert2 = sprintf \"python $maindir\/FindChannelAlerts2.py --file \'$PathTo\/Result_sorted\' --dir \'$pathto\' --name \'Result_sorted_2_\' --cur-time \$TimeNow\"\;\n";
+print pp "\$FindChanAlert2 = sprintf \"python $maindir\/FindChannelAlerts2.py
+          --file \'$PathTo\/Result_sorted\' --dir \'$pathto\'
+          --name \'Result_sorted_2_\' --cur-time \$TimeNow\"\;\n";
 print pp "system \$FindChanAlert2\;\n\n";
-print pp "\$copyfiles = sprintf \"python $maindir\/CopyFilestopublichtml.py --cur-time \$TimeNow\"\;\n";
+print pp "\$copyfiles = sprintf \"python $maindir\/CopyFilestopublichtml.py
+          --cur-time \$TimeNow\"\;\n";
 print pp "system \$copyfiles\;\n\n";
-print pp "\$MakeHTML = sprintf \"python $maindir\/LigoCamHtml.py --cur-time \$TimeNow --cur-utctime $TimeNowUTC\"\;\n";
+print pp "\$MakeHTML = sprintf \"python $maindir\/LigoCamHtml.py --cur-time
+          \$TimeNow --cur-utctime $TimeNowUTC\"\;\n";
 print pp "system \$MakeHTML\;\n\n";
-print pp "\$editfile = sprintf \"python $maindir\/LigoCAMeditCalendar.py --cur-time \$TimeNow --ymdh-string $ymdh --hour-string $hour --month-string $month --year-string $year\"\;\n";
+print pp "\$editfile = sprintf \"python $maindir\/LigoCAMeditCalendar.py
+          --cur-time \$TimeNow --ymdh-string $ymdh --hour-string $hour
+          --month-string $month --year-string $year\"\;\n";
 print pp "system \$editfile\;\n\n";
-print pp "\$sendalertemail = sprintf \"/home/dtalukder/Projects/detchar/LigoCAM/PEM/send_email $TimeNowSave $TimeNowUTC\"\;\n";
+print pp "\$sendalertemail = sprintf \"${maindir}/send_email $TimeNowSave
+          $TimeNowUTC\"\;\n";
 print pp "system \$sendalertemail\;\n\n";
 close(pp);
 
