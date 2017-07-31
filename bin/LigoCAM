@@ -1,0 +1,181 @@
+#!/usr/bin/python
+from __future__ import division
+import matplotlib.mlab as mlab
+import numpy as np
+import os
+import commands
+from optparse import OptionParser
+import LigoCAM_utils as LCutils
+import LigoCAM_refPSD as LCrefPSD
+import shutil
+from glue import lal
+from pylal import frutils
+
+parser = OptionParser()
+parser.add_option("-t", "--cur-time", dest="curGpsTime", type="int",
+                  help="Current GPS-start-time", metavar="TIME")
+parser.add_option("-u", "--cur-utctime", dest="curUtcTime", type="string",
+                  help="Current UTC-start-time", metavar="TIME")
+parser.add_option("-c", "--channel-list", dest="channelList", type="string",
+                  help="Channels for LigoCAM", metavar="FILE")
+parser.add_option("-l", "--ifo", dest="observatory", type="string",
+                  help="Observatory for LigoCAM", metavar="NAME")
+parser.add_option("-f", "--frame_type", dest="frameType", type="string",
+                  help="Frames for LigoCAM", metavar="NAME")
+
+(options, args) = parser.parse_args()
+
+run_dir = '/home/dtalukder/Projects/detchar/LigoCAM/PEM/'
+
+strcurGpsTime = str(options.curGpsTime)
+strcurUtcTime = options.curUtcTime
+strcurUtcTime = strcurUtcTime.replace('_', ' ')
+channellist = options.channelList
+
+cmd_temp = 'echo $TMPDIR'
+temp_dir = commands.getoutput(cmd_temp)
+ifo = options.observatory
+observatory = ifo[0]
+frame_type = ifo + '_' + options.frameType
+
+curgpstime = options.curGpsTime
+gpsstarttime = curgpstime - 1800
+gpsendtime = gpsstarttime + 512
+
+file_prefix = run_dir + 'cache/current_' + str(gpsstarttime) + '_'
+cache_file = file_prefix + 'frame_cache.txt'
+cache = lal.Cache.fromfile(open(cache_file))
+get_data = frutils.FrameCache(cache, scratchdir=None, verbose=False)
+
+chan = open(run_dir + 'config_files/' + channellist,'r')
+
+for x in chan:
+    x_n = x.rstrip()
+    x_nn = x_n.replace(':', '_')
+    print x_n
+    try:
+        data = get_data.fetch(x_n, gpsstarttime, gpsendtime)
+    except Exception, e:
+        print(e)
+        continue
+    Fs = len(data) / 512
+    overlap = 0
+    Pxx, freq = mlab.psd(data, NFFT=len(data), Fs=int(Fs), \
+               noverlap=int(overlap*Fs), detrend=mlab.detrend_none, \
+               window=mlab.window_hanning, pad_to=None, sides='default', \
+                                                            scale_by_freq=1)
+    curgpstime = options.curGpsTime
+    Pxx_len = len(Pxx)
+    if os.path.exists(run_dir + 'ref_files/' + x_nn + '.txt'):
+        Pxx_r = np.loadtxt(run_dir + 'ref_files/' + x_nn + '.txt', \
+                                                    delimiter=",")
+    else:
+        try:
+            Pxx_r = LCrefPSD.compute_refpsd(x_n, x_nn, gpsstarttime, Pxx_len, \
+                                        observatory, frame_type, Fs, overlap)
+        except Exception, e:
+            print(e)
+            continue
+    if os.path.exists(run_dir + 'results/Disconnected_past.txt'):
+        needed_file = 'exist'
+    else:
+        shutil.copy2(run_dir + 'results/Disconnected_default.txt', run_dir + \
+                                              'results/Disconnected_past.txt')
+    if os.path.exists(run_dir + 'results/DAQfailure_past.txt'):
+        needed_file2 = 'exist'
+    else:
+        shutil.copy2(run_dir + 'results/DAQfailure_default.txt', run_dir + \
+                                                'results/DAQfailure_past.txt')
+
+    if len(Pxx) == 4097:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+        data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 8193:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+        data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 16385:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_16385_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+        data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 32769:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_32769_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+        data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 65537:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_65537_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+        data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 131073:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11,
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_131073_case(x_n, x_nn, strcurGpsTime, \
+        strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 262145:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_262145_case(x_n, x_nn, strcurGpsTime, \
+        strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 524289:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_524289_case(x_n, x_nn, strcurGpsTime, \
+        strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 1048577:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_1048577_case(x_n, x_nn, strcurGpsTime, \
+        strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 2097153:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_2097153_case(x_n, x_nn, strcurGpsTime, \
+        strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
+    elif len(Pxx) == 4194305:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_for_4194305_case(x_n, x_nn, strcurGpsTime, \
+        strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
+    else:
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
+        excess, comb, disconnect, status, disconhour, daqfailhour = \
+        LCutils.do_all_other_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+        data, Fs, freq, Pxx, Pxx_r)
+
+    f_out = open(run_dir + 'results/Result' + str(options.curGpsTime) + '_' + \
+                                                            x_nn + '.txt','w')
+    f_out.write("%s  %.3g  %.3g  %.3g  %.3g  %.3g  %.3g  %.3g  %.3g  %.3g  \
+               %.3g  %.3g  %s  %s  %s  %s  %.2g  %.2g\n" % (x_n, pc_1, pc_2, \
+               pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, excess, \
+               comb, disconnect, status, disconhour, daqfailhour))
+    f_out.close()
+
+    Disconnfile_out = open(run_dir + 'results/Disconnected' + \
+                           str(options.curGpsTime) + '_' + x_nn + '.txt', 'w')
+    Disconnfile_out.write("%s  %.2g\n" % (x_n,disconhour))
+    Disconnfile_out.close()
+
+    DAQfailfile_out = open(run_dir + 'results/DAQfailure' + \
+                            str(options.curGpsTime) + '_' + x_nn + '.txt', 'w')
+    DAQfailfile_out.write("%s  %.2g\n" % (x_n,daqfailhour))
+    DAQfailfile_out.close()
+
+    if disconhour == 24:
+        Disconnmail = open(run_dir + 'results/Disconnmail' + \
+                            str(options.curGpsTime) + '_' + x_nn + '.txt', 'w')
+        Disconnmail.write("%s\n" % x_n)
+        Disconnmail.close()
+
+    if daqfailhour == 1:
+        DAQfailmail = open(run_dir + 'results/DAQfailmail' + \
+                            str(options.curGpsTime) + '_' + x_nn + '.txt', 'w')
+        DAQfailmail.write("%s\n" % x_n)
+        DAQfailmail.close()
+
+chan.close()
