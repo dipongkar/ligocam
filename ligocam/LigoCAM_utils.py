@@ -1,8 +1,25 @@
+# Copyright (C) 2013 Dipongkar Talukder
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+""" This file is part of LIGO Channel Activity Monitor (LigoCAM)."""
+
 from __future__ import division
 import numpy as np
 import LigoCAM_plotutils as pltutils
 
-run_dir = '/home/dtalukder/Projects/detchar/LigoCAM/PEM/'
+__author__ = 'Dipongkar Talukder <dipongkar.talukder@ligo.org>'
 
 comb_th = 1e-8
 comb_seis_th = 1e-7
@@ -41,8 +58,8 @@ rng8 = range(51200,153600)
 rng9 = range(153600,512000)
 rng10 = range(512000,1536000)
 
-def get_disconnected_yes_hour(x_n):
-    ff = open(run_dir + 'results/Disconnected_past.txt', 'r')
+def get_disconnected_yes_hour(run_dir, x_n):
+    ff = open(run_dir + '/results/Disconnected_past.txt', 'r')
     hournew = 0
     for line in ff.readlines():
         word = line.split()
@@ -60,8 +77,8 @@ def get_disconnected_yes_hour(x_n):
         hournew = hournew
     return hournew
 
-def get_daqfailure_yes_hour(x_n):
-    ff = open(run_dir + 'results/DAQfailure_past.txt', 'r')
+def get_daqfailure_yes_hour(run_dir, x_n):
+    ff = open(run_dir + '/results/DAQfailure_past.txt', 'r')
     hournew = 0
     for line in ff.readlines():
         word = line.split()
@@ -94,8 +111,8 @@ def get_binned_data(freq, pwr, chunksize):
         freq_binned = np.concatenate((freq_binned, freq_binned_edge), axis=0)
     return freq_binned, pwr_binned
 
-def do_all_for_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                data, Fs, freq, Pxx, Pxx_r):
     rng5n = range(1536, 4096)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -127,11 +144,11 @@ def do_all_for_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         comb = 'No'
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -177,13 +194,13 @@ def do_all_for_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
                               f_1, f_2, f_3, f_4, f_5, p_1, p_2, p_3, p_4, \
                               p_5, fb_3, fb_4, fb_5, pb_3, pb_4, pb_5, pr_1, \
                                                   pr_2, prb_3, prb_4, prb_5)
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -193,8 +210,8 @@ def do_all_for_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                               data, Fs, freq, Pxx, Pxx_r):
     rng6n = range(5120, 8192)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -229,11 +246,11 @@ def do_all_for_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         comb = 'No'
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -279,13 +296,13 @@ def do_all_for_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
                         f_1, f_2, f_3, f_4, f_5, f_6, p_1, p_2, p_3, p_4, p_5, \
                         p_6, fb_3, fb_4, fb_5, fb_6, pb_3, pb_4, pb_5, pb_6, \
                         pr_1, pr_2, prb_3, prb_4, prb_5, prb_6)
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -295,8 +312,8 @@ def do_all_for_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_16385_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_16385_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                data, Fs, freq, Pxx, Pxx_r):
     rng7n = range(15360, 16384)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -335,11 +352,11 @@ def do_all_for_16385_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         comb = 'No'
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -385,15 +402,15 @@ def do_all_for_16385_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_16385_and_32769_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, \
                       strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, \
                       p_1, p_2, p_3, p_4, p_5, p_6, p_7, fb_3, fb_4, fb_5, \
                       fb_6, fb_7, pb_3, pb_4, pb_5, pb_6, pb_7, pr_1, pr_2, \
                       prb_3, prb_4, prb_5, prb_6, prb_7)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -403,8 +420,8 @@ def do_all_for_16385_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_32769_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                data, Fs, freq, Pxx, Pxx_r):
     rng7n = range(15360, 32768)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -442,11 +459,11 @@ def do_all_for_32769_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         comb = 'No'
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -492,14 +509,14 @@ def do_all_for_32769_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_16385_and_32769_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, \
             strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, p_1, p_2, \
             p_3, p_4, p_5, p_6, p_7, fb_3, fb_4, fb_5, fb_6, fb_7, pb_3, pb_4, \
             pb_5, pb_6, pb_7, pr_1, pr_2, prb_3, prb_4, prb_5, prb_6, prb_7)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -509,8 +526,8 @@ def do_all_for_32769_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_65537_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_65537_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                data, Fs, freq, Pxx, Pxx_r):
     rng8n = range(51200, 65536)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -615,11 +632,11 @@ def do_all_for_65537_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             comb = 'No'
 
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -665,15 +682,15 @@ def do_all_for_65537_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_65537_and_131073_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, p_1, \
              p_2, p_3, p_4, p_5, p_6, p_7, p_8, fb_3, fb_4, fb_5, fb_6, fb_7, \
              fb_8, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pr_1, pr_2, prb_3, \
              prb_4, prb_5, prb_6, prb_7, prb_8)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -683,8 +700,8 @@ def do_all_for_65537_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_131073_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_131073_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                data, Fs, freq, Pxx, Pxx_r):
     rng8n = range(51200, 131072)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -740,11 +757,11 @@ def do_all_for_131073_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             comb = 'No'
 
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -791,15 +808,15 @@ def do_all_for_131073_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_65537_and_131073_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, p_1, \
              p_2, p_3, p_4, p_5, p_6, p_7, p_8, fb_3, fb_4, fb_5, fb_6, fb_7, \
              fb_8, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pr_1, pr_2, prb_3, \
              prb_4, prb_5, prb_6, prb_7, prb_8)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -809,8 +826,8 @@ def do_all_for_131073_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_262145_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                  data, Fs, freq, Pxx, Pxx_r):
     rng9n = range(153600, 262144)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -900,11 +917,11 @@ def do_all_for_262145_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             comb = 'No'
 
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -951,15 +968,15 @@ def do_all_for_262145_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_262145_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
              f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, p_1, p_2, p_3, p_4, \
              p_5, p_6, p_7, p_8, p_9, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, \
              fb_9, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pr_1, pr_2, \
              prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print > >newreffile, item
         newreffile.close()
@@ -969,8 +986,8 @@ def do_all_for_262145_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_524289_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_524289_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                 data, Fs, freq, Pxx, Pxx_r):
     rng10n = range(512000, 524288)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -1064,11 +1081,11 @@ def do_all_for_524289_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             comb = 'No'
 
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -1114,8 +1131,8 @@ def do_all_for_524289_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
         else:
             status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_524289_and_1048577_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
              f_10, p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, fb_3, \
              fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, pb_3, pb_4, pb_5, \
@@ -1123,7 +1140,7 @@ def do_all_for_524289_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
              prb_6, prb_7, prb_8, prb_9, prb_10)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -1133,8 +1150,8 @@ def do_all_for_524289_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_1048577_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                 data, Fs, freq, Pxx, Pxx_r):
     rng10n = range(512000, 1048576)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -1273,11 +1290,11 @@ def do_all_for_1048577_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             comb = 'No'
 
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -1324,8 +1341,8 @@ def do_all_for_1048577_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_524289_and_1048577_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, \
             strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
             f_10, p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, fb_3, \
             fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, pb_3, pb_4, pb_5, pb_6, \
@@ -1333,7 +1350,7 @@ def do_all_for_1048577_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             prb_7, prb_8, prb_9, prb_10)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -1343,8 +1360,8 @@ def do_all_for_1048577_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                            freq, Pxx, Pxx_r):
+def do_all_for_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                  data, Fs, freq, Pxx, Pxx_r):
     rng11n = range(1536000, 2097152)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -1485,11 +1502,11 @@ def do_all_for_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             comb = 'No'
 
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -1536,8 +1553,8 @@ def do_all_for_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
             f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11, p_1, p_2, \
             p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11, fb_3, fb_4, fb_5, \
             fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, pb_4, pb_5, pb_6, \
@@ -1545,7 +1562,7 @@ def do_all_for_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             prb_6, prb_7, prb_8, prb_9, prb_10, prb_11)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -1555,8 +1572,8 @@ def do_all_for_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_for_4194305_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
-                                                        freq, Pxx, Pxx_r):
+def do_all_for_4194305_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                data, Fs, freq, Pxx, Pxx_r):
     rng11n = range(1536000, 4194304)
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
     f_2 = freq[rng2]; p_2 = Pxx[rng2]
@@ -1643,11 +1660,11 @@ def do_all_for_4194305_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
             comb = 'No'
 
     if  disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if  comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -1694,8 +1711,8 @@ def do_all_for_4194305_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_4194305_and_allother_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
              f_10, f_11a, f_11b, f_11c, f_11d, f_11e, p_1, p_2, p_3, p_4, p_5, \
              p_6, p_7, p_8, p_9, p_10, p_11a, p_11b, p_11c, p_11d, p_11e, \
@@ -1704,7 +1721,7 @@ def do_all_for_4194305_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
              prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, prb_10, prb_11)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()
@@ -1714,8 +1731,8 @@ def do_all_for_4194305_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, \
     return pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
            excess, comb, disconnect, status, disconhour, daqfailhour
 
-def do_all_other_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, freq, \
-                                                                Pxx, Pxx_r):
+def do_all_other_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                            data, Fs, freq, Pxx, Pxx_r):
     rng11n = range(1536000, 5120000)
     #Note: 16384Hz channels will be cut at 10,000Hz!
     f_1 = freq[rng1]; p_1 = Pxx[rng1]
@@ -1804,11 +1821,11 @@ def do_all_other_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, freq, \
             comb = 'No'
 
     if disconnect == 'Yes':
-        disconhour = get_disconnected_yes_hour(x_n)
+        disconhour = get_disconnected_yes_hour(run_dir, x_n)
     else:
         disconhour = 0
     if comb == 'Yes':
-        daqfailhour = get_daqfailure_yes_hour(x_n)
+        daqfailhour = get_daqfailure_yes_hour(run_dir, x_n)
     else:
         daqfailhour = 0
 
@@ -1855,8 +1872,8 @@ def do_all_other_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, freq, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_4194305_and_allother_case(x_n, x_nn, strcurGpsTime, \
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
              f_10, f_11a, f_11b, f_11c, f_11d, f_11e, p_1, p_2, p_3, p_4, p_5, \
              p_6, p_7, p_8, p_9, p_10, p_11a, p_11b, p_11c, p_11d, p_11e, \
@@ -1865,7 +1882,7 @@ def do_all_other_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs, freq, \
              prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, prb_10, prb_11)
 
     if status == 'Ok':
-        newreffile = open(run_dir + 'ref_files/' + x_nn + '.txt', 'w')
+        newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
             print >> newreffile, item
         newreffile.close()

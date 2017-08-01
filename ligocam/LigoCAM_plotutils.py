@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 import pylab as plb
 import numpy as np
 
-run_dir = '/home/dtalukder/Projects/detchar/LigoCAM/PEM/'
-
-def timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs):
+def timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs):
     dlen = int(len(data) / 512)
     fig = plt.figure(2, figsize=(10,8))
     plt.subplot(311)
@@ -37,11 +35,11 @@ def timeseries_plot(x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs):
     plb.xticks([0, (dlen-1)/2, dlen-1], ['511', '511.5', '512'])
     plt.xlabel('Time [s]', fontsize=14)
     plt.grid(True)
-    fig.savefig(run_dir + 'images/TS/' + strcurGpsTime + '/' + x_nn + \
+    fig.savefig(run_dir + '/images/TS/' + strcurGpsTime + '/' + x_nn + \
                                                         '.png', dpi=75)
     fig.clf()
 
-def psdplot_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
+def psdplot_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
                      f_3, f_4, f_5, p_1, p_2, p_3, p_4, p_5, fb_3, fb_4, fb_5, \
                      pb_3, pb_4, pb_5, pr_1, pr_2, prb_3, prb_4, prb_5):
     fig = plt.figure(1, figsize=(10,8))
@@ -76,10 +74,10 @@ def psdplot_4097_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
     plb.yticks([], [])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
+def psdplot_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
                      f_3, f_4, f_5, f_6, p_1, p_2, p_3, p_4, p_5, p_6, fb_3, \
                      fb_4, fb_5, fb_6, pb_3, pb_4, pb_5, pb_6, pr_1, pr_2, \
                      prb_3, prb_4, prb_5, prb_6):
@@ -119,10 +117,10 @@ def psdplot_8193_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
     plb.yticks([], [])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_Dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_Dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_16385_and_32769_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+def psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
                       f_1, f_2, f_3, f_4, f_5, f_6, f_7, p_1, p_2, p_3, p_4, \
                       p_5, p_6, p_7, fb_3, fb_4, fb_5, fb_6, fb_7, pb_3, pb_4, \
                       pb_5, pb_6, pb_7, pr_1, pr_2, prb_3, prb_4, prb_5, \
@@ -166,10 +164,10 @@ def psdplot_16385_and_32769_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
     plb.yticks([], [])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_65537_and_131073_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+def psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
                   f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, p_1, p_2, p_3, p_4, \
                   p_5, p_6, p_7, p_8, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, \
                   pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pr_1, pr_2, prb_3, \
@@ -213,10 +211,10 @@ def psdplot_65537_and_131073_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
     plb.yticks([], [])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_262145_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
+def psdplot_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
                    f_3, f_4, f_5, f_6, f_7, f_8, f_9, p_1, p_2, p_3, p_4, p_5, \
                    p_6, p_7, p_8, p_9, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, \
                    fb_9, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pr_1, pr_2, \
@@ -260,10 +258,10 @@ def psdplot_262145_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
     plb.xticks([300, 1000, 3000, 10000], ['300', '1000', '3000', '10000'])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_524289_and_1048577_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+def psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
                 Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, p_1, \
                 p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, fb_3, fb_4, \
                 fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, pb_3, pb_4, pb_5, pb_6, \
@@ -311,10 +309,10 @@ def psdplot_524289_and_1048577_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     plb.xticks([300, 1000, 3000, 10000], ['300', '1000', '3000', '10000'])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, \
+def psdplot_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, \
                    f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11, p_1, \
                    p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11, fb_3, \
                    fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, \
@@ -366,10 +364,10 @@ def psdplot_2097153_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, \
     plb.xticks([300, 1000, 3000, 10000], ['300', '1000', '3000', '10000'])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_4194305_and_allother_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+def psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11a, \
             f_11b, f_11c, f_11d, f_11e, p_1, p_2, p_3, p_4, p_5, p_6, p_7, \
             p_8, p_9, p_10, p_11a, p_11b, p_11c, p_11d, p_11e, fb_3, fb_4, \
@@ -424,5 +422,5 @@ def psdplot_4194305_and_allother_case(x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     plb.xticks([300, 1000, 3000, 10000], ['300', '1000', '3000', '10000'])
     plt.grid(True)
     plt.xlabel('Frequency [Hz]', fontsize=14)
-    fig.savefig(run_dir + 'images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
+    fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()

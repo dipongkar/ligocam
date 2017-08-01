@@ -40,17 +40,17 @@ parser.add_option("-c", "--channel-list", dest="channelList", type="string",
                   help="Channels for LigoCAM", metavar="FILE")
 parser.add_option("-l", "--ifo", dest="observatory", type="string",
                   help="Observatory for LigoCAM", metavar="NAME")
-parser.add_option("-f", "--frame_type", dest="frameType", type="string",
+parser.add_option("-f", "--frame-type", dest="frameType", type="string",
                   help="Frames for LigoCAM", metavar="NAME")
-
+parser.add_option("-d", "--run-dir", dest="runDir", type="string",
+                  help="Run directory", metavar="NAME")
 (options, args) = parser.parse_args()
-
-run_dir = '/home/dtalukder/Projects/detchar/LigoCAM/PEM/'
 
 strcurGpsTime = str(options.curGpsTime)
 strcurUtcTime = options.curUtcTime
 strcurUtcTime = strcurUtcTime.replace('_', ' ')
 channellist = options.channelList
+run_dir = options.runDir
 
 cmd_temp = 'echo $TMPDIR'
 temp_dir = commands.getoutput(cmd_temp)
@@ -91,7 +91,7 @@ for x in chan:
                                                     delimiter=",")
     else:
         try:
-            Pxx_r = LCrefPSD.compute_refpsd(x_n, x_nn, gpsstarttime, Pxx_len, \
+            Pxx_r = LCrefPSD.compute_refpsd(run_dir, x_n, x_nn, gpsstarttime, Pxx_len, \
                                         observatory, frame_type, Fs, overlap)
         except Exception, e:
             print(e)

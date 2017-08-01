@@ -6,10 +6,8 @@ from pylal import frutils
 
 alpha = 2 / (1+12)
 
-run_dir = '/home/dtalukder/Projects/detchar/LigoCAM/PEM/'
-
-def get_binned(x_n, refstart, refend, Pxx_len, Fs, overlap):
-    file_prefix_ri = run_dir + 'cache/reference_' + str(refstart) + '_'
+def get_binned(run_dir, x_n, refstart, refend, Pxx_len, Fs, overlap):
+    file_prefix_ri = run_dir + '/cache/reference_' + str(refstart) + '_'
     cache_file_ri = file_prefix_ri + 'frame_cache.txt'
     cache_ri = lal.Cache.fromfile(open(cache_file_ri))
     get_data_ri = frutils.FrameCache(cache_ri, scratchdir=None, verbose=False)
@@ -44,55 +42,55 @@ def get_binned(x_n, refstart, refend, Pxx_len, Fs, overlap):
         Pxx_ref_binned = LCrefutils.do_all_other_case(Pxx_ri)
     return Pxx_ref_binned
 
-def compute_refpsd(x_n, x_nn, gpsstarttime, Pxx_len, observatory, frame_type, \
+def compute_refpsd(run_dir, x_n, x_nn, gpsstarttime, Pxx_len, observatory, frame_type, \
                                                                 Fs, overlap):
     refstart1 = gpsstarttime - 3600
     refend1 =  refstart1 + 512
-    Pxx_r1_binned = get_binned(x_n, refstart1, refend1, Pxx_len, Fs, overlap)
+    Pxx_r1_binned = get_binned(run_dir, x_n, refstart1, refend1, Pxx_len, Fs, overlap)
 
     refstart2 = refstart1 - 3600
     refend2 =  refstart2 + 512
-    Pxx_r2_binned = get_binned(x_n, refstart2, refend2, Pxx_len, Fs, overlap)
+    Pxx_r2_binned = get_binned(run_dir, x_n, refstart2, refend2, Pxx_len, Fs, overlap)
 
     refstart3 = refstart2 - 3600
     refend3 =  refstart3 + 512
-    Pxx_r3_binned = get_binned(x_n, refstart3, refend3, Pxx_len, Fs, overlap)
+    Pxx_r3_binned = get_binned(run_dir, x_n, refstart3, refend3, Pxx_len, Fs, overlap)
 
     refstart4 = refstart3 - 3600
     refend4 =  refstart4 + 512
-    Pxx_r4_binned = get_binned(x_n, refstart4, refend4, Pxx_len, Fs, overlap)
+    Pxx_r4_binned = get_binned(run_dir, x_n, refstart4, refend4, Pxx_len, Fs, overlap)
 
     refstart5 = refstart4 - 3600
     refend5 =  refstart5 + 512
-    Pxx_r5_binned = get_binned(x_n, refstart5, refend5, Pxx_len, Fs, overlap)
+    Pxx_r5_binned = get_binned(run_dir, x_n, refstart5, refend5, Pxx_len, Fs, overlap)
 
     refstart6 = refstart5 - 3600
     refend6 =  refstart6 + 512
-    Pxx_r6_binned = get_binned(x_n, refstart6, refend6, Pxx_len, Fs, overlap)
+    Pxx_r6_binned = get_binned(run_dir, x_n, refstart6, refend6, Pxx_len, Fs, overlap)
 
     refstart7 = refstart6 - 3600
     refend7 =  refstart7 + 512
-    Pxx_r7_binned = get_binned(x_n, refstart7, refend7, Pxx_len, Fs, overlap)
+    Pxx_r7_binned = get_binned(run_dir, x_n, refstart7, refend7, Pxx_len, Fs, overlap)
 
     refstart8 = refstart7 - 3600
     refend8 =  refstart8 + 512
-    Pxx_r8_binned = get_binned(x_n, refstart8, refend8, Pxx_len, Fs, overlap)
+    Pxx_r8_binned = get_binned(run_dir, x_n, refstart8, refend8, Pxx_len, Fs, overlap)
 
     refstart9 = refstart8 - 3600
     refend9 =  refstart9 + 512
-    Pxx_r9_binned = get_binned(x_n, refstart9, refend9, Pxx_len, Fs, overlap)
+    Pxx_r9_binned = get_binned(run_dir, x_n, refstart9, refend9, Pxx_len, Fs, overlap)
 
     refstart10 = refstart9 - 3600
     refend10 =  refstart10 + 512
-    Pxx_r10_binned = get_binned(x_n, refstart10, refend10, Pxx_len, Fs, overlap)
+    Pxx_r10_binned = get_binned(run_dir, x_n, refstart10, refend10, Pxx_len, Fs, overlap)
 
     refstart11 = refstart10 - 3600
     refend11 =  refstart11 + 512
-    Pxx_r11_binned = get_binned(x_n, refstart11, refend11, Pxx_len, Fs, overlap)
+    Pxx_r11_binned = get_binned(run_dir, x_n, refstart11, refend11, Pxx_len, Fs, overlap)
 
     refstart12 = refstart11 - 3600
     refend12 =  refstart12 + 512
-    Pxx_r12_binned = get_binned(x_n, refstart12, refend12, Pxx_len, Fs, overlap)
+    Pxx_r12_binned = get_binned(run_dir, x_n, refstart12, refend12, Pxx_len, Fs, overlap)
 
     simple_mean = (Pxx_r1_binned + Pxx_r2_binned) / 2
     ema3 = simple_mean + alpha * (Pxx_r3_binned - simple_mean)

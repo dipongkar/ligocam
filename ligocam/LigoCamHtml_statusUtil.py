@@ -1,9 +1,6 @@
 import LigoCamHtmlLib as CamHtml
 
-run_dir = '/home/dtalukder/Projects/detchar/LigoCAM/PEM/'
-pubhtml_dir = '/home/dtalukder/public_html/Projects/detchar/LigoCAM/PEM/'
-
-def ligocam_makehtml_status(line, strcurUtcTime, curGpsTime):
+def ligocam_makehtml_status(pubhtml_dir, line, strcurUtcTime, curGpsTime):
     t = CamHtml.Table(header_row=[CamHtml.TableCell('Channel name', \
                 width='31%', header=True), CamHtml.TableCell('STATUS', \
                 width='7%', header=True), CamHtml.TableCell('Disconnected?', \
@@ -175,7 +172,7 @@ def ligocam_makehtml_status(line, strcurUtcTime, curGpsTime):
                    band11, image])
 
     # open an HTML file to show output in a browser
-    HTMLFILE = pubhtml_dir + 'status/' + chan_rn + '_status.html'
+    HTMLFILE = pubhtml_dir + '/status/' + chan_rn + '_status.html'
     f = open(HTMLFILE, 'w')
 
     htmlcode = str(t)
@@ -214,12 +211,12 @@ def ligocam_makehtml_status(line, strcurUtcTime, curGpsTime):
 
     f.close()
 
-def ligocam_makehtml_status_nodata(chan, curGpsTime):
+def ligocam_makehtml_status_nodata(run_dir, pubhtml_dir, chan, curGpsTime):
     chan = chan.rstrip()
     chan_rn = chan.replace(':', '_')
-    resultfile = run_dir + 'results/Result_sorted_2_' + str(curGpsTime) + '.txt'
+    resultfile = run_dir + '/results/Result_sorted_2_' + str(curGpsTime) + '.txt'
     if chan not in open(resultfile).read():
-        status_err = open(pubhtml_dir + 'status/' + chan_rn + \
+        status_err = open(pubhtml_dir + '/status/' + chan_rn + \
                                                     '_status.html', 'w')
         status_err.write('No data or not enough data to determine the status.')
         status_err.close()

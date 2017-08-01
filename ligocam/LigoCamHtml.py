@@ -1,25 +1,47 @@
+# Copyright (C) 2013 Dipongkar Talukder
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+""" This file is part of LIGO Channel Activity Monitor (LigoCAM)."""
+
 import LigoCamHtmlLib as CamHtml
 from optparse import OptionParser
 import os
 import shutil
 import LigoCamHtml_statusUtil as LChtmlUtil
 
+__author__ = 'Dipongkar Talukder <dipongkar.talukder@ligo.org>'
+
 parser = OptionParser()
 parser.add_option("-t", "--cur-time", dest="curGpsTime", type="int",
                   help="Current GPS-start-time", metavar="TIME")
 parser.add_option("-u", "--cur-utctime", dest="curUtcTime", type="string",
                   help="Current UTC-start-time", metavar="TIME")
-
-run_dir = '/home/dtalukder/Projects/detchar/LigoCAM/PEM/'
-pubhtml_dir = '/home/dtalukder/public_html/Projects/detchar/LigoCAM/PEM/'
-
+parser.add_option("-d", "--run-dir", dest="runDir", type="string",
+                  help="Run directory", metavar="NAME")
+parser.add_option("-p", "--pubhtml-dir", dest="pubhtmlDir", type="string",
+                  help="PublicHTML directory", metavar="NAME")
 (options, args) = parser.parse_args()
+
 strcurUtcTime = options.curUtcTime
 strcurUtcTime = strcurUtcTime.replace('_', ' ')
 curGpsTime = options.curGpsTime
+run_dir = options.runDir
+pubhtml_dir = options.pubhtmlDir
 
 # open an HTML file to show output in a browser
-HTMLFILE = run_dir + 'pages/LigoCamHTML_sorted_2_' + str(options.curGpsTime) + \
+HTMLFILE = run_dir + '/pages/LigoCamHTML_sorted_2_' + str(options.curGpsTime) + \
                                                                         '.html'
 f = open(HTMLFILE, 'w')
 
@@ -46,7 +68,7 @@ t = CamHtml.Table(header_row=[CamHtml.TableCell('Channel name', width='29%', \
 thd1g = 1000; thd1l = 0.002
 thd2g = 50; thd2l = 0.2
 
-ff = open(run_dir + "results/Result_sorted_2_" + str(options.curGpsTime) + \
+ff = open(run_dir + "/results/Result_sorted_2_" + str(options.curGpsTime) + \
                                                                 ".txt", "r")
 for line in ff.readlines():
     word = line.split()
@@ -237,21 +259,21 @@ print '-'*79
 ff.close()
 f.close()
 
-HTMLFILE_pages = pubhtml_dir + 'pages/LigoCamHTML_' + \
+HTMLFILE_pages = pubhtml_dir + '/pages/LigoCamHTML_' + \
                                        str(options.curGpsTime) + '.html'
 shutil.copy2(HTMLFILE, HTMLFILE_pages)
-HTMLFILE_current = pubhtml_dir + 'LigoCamHTML_current' + '.html'
+HTMLFILE_current = pubhtml_dir + '/LigoCamHTML_current' + '.html'
 filestat = os.stat(HTMLFILE_pages)
 file_size = filestat.st_size
 if file_size > 2000:
     shutil.copy2(HTMLFILE, HTMLFILE_current)
-    ff = open(run_dir + "results/Result_sorted_2_" + str(options.curGpsTime) + \
+    ff = open(run_dir + "/results/Result_sorted_2_" + str(options.curGpsTime) + \
                                                                    ".txt", "r")
     for line in ff.readlines():
-        LChtmlUtil.ligocam_makehtml_status(line, strcurUtcTime, curGpsTime)
-    fulldata = open(run_dir + "channel_full.txt", "r")
+        LChtmlUtil.ligocam_makehtml_status(pubhtml_dir, line, strcurUtcTime, curGpsTime)
+    fulldata = open(run_dir + "/channel_full.txt", "r")
     for chan in fulldata.readlines():
-        LChtmlUtil.ligocam_makehtml_status_nodata(chan, curGpsTime)
+        LChtmlUtil.ligocam_makehtml_status_nodata(run_dir, pubhtml_dir, chan, curGpsTime)
     fulldata.close()
     ff.close()
 else:

@@ -1,6 +1,7 @@
 #! /usr/bin/perl
 
 $maindir = "/home/dtalukder/Projects/detchar/LigoCAM/PEM";
+$pubhtmldir = "/home/dtalukder/public_html/Projects/detchar/LigoCAM/PEM";
 $sub = "condor";
 $TimeNow = `tconvert now`;
 chomp($TimeNow);
@@ -48,6 +49,7 @@ while(<jobfile>) {
     print dag "frameType=\"$fmtype\" ";
     print dag "currTime=\"$TimeNow\" ";
     print dag "currTimeUTC=\"$TimeNowUTC\" ";
+    print dag "run_dir=\"$maindir\" ";
     print dag "\n\n";
 }
 }
@@ -74,7 +76,7 @@ print consub "error = $logsdir/ligocam_$TimeNow\_\$(channelList).err\n";
 print consub "output = $logsdir/ligocam_$TimeNow\_\$(channelList).out\n";
 print consub "arguments = \"--channel-list \$(channelList) --ifo \$(ifo)
                --frame_type \$(frameType) --cur-time \$(currTime)
-               --cur-utctime \$(currTimeUTC)\"\n";
+               --run-dir \$(run_dir) --cur-utctime \$(currTimeUTC)\"\n";
 print consub "request_memory = 3000\n";
 print consub "priority = 20\n";
 print consub "+LIGOCAM = True\n";
@@ -87,16 +89,18 @@ close(consub);
 
 
 $makeImageDir = sprintf "python ${maindir}/LigoCAM_preparedir.py
-                          --cur-time $TimeNow";
+                          --run-dir $maindir --cur-time $TimeNow";
 system $makeImageDir;
 
 $Run_datafind_cur = sprintf "python ${maindir}/LigoCAM_datafind.py --ifo $ifo
-                --frame_type $fmtype --cache_group current --cur-time $TimeNow";
+                --frame_type $fmtype --cache-group current --run-dir $maindir
+                --cur-time $TimeNow";
 system $Run_datafind_cur;
 for ($k=0; $k<12; $k=$k+1) {
  $TimeRef = $TimeNow - 3600;
  $Run_datafind_ref = sprintf "python ${maindir}/LigoCAM_datafind.py --ifo $ifo
-             --frame_type $fmtype --cache_group reference --cur-time $TimeRef";
+             --frame_type $fmtype --cache-group reference --run-dir $maindir
+             --cur-time $TimeRef";
  system $Run_datafind_ref;
  $TimeNow = $TimeRef;
 }
@@ -294,7 +298,8 @@ close(jobfile);
 
 
 $PathTo = sprintf "${maindir}/results";
-print pp "\$Movehistfile = sprintf \"python $maindir\/Movehistory_files.py\"\;\n";
+print pp "\$Movehistfile = sprintf \"python $maindir\/Movehistory_files.py
+           --run-dir \'$maindir\'\"\;\n";
 print pp "system \$Movehistfile\; \n\n";
 print pp "\$FindChanAlert = sprintf \"python $maindir\/FindChannelAlerts.py
           --file \'$PathTo\/Result\' --dir \'$pathto\' --name \'Result_sorted\'
@@ -305,14 +310,17 @@ print pp "\$FindChanAlert2 = sprintf \"python $maindir\/FindChannelAlerts2.py
           --name \'Result_sorted_2_\' --cur-time \$TimeNow\"\;\n";
 print pp "system \$FindChanAlert2\;\n\n";
 print pp "\$copyfiles = sprintf \"python $maindir\/CopyFilestopublichtml.py
+         --run-dir \'$maindir\' --pubhtml-dir \'$pubhtmldir\'
           --cur-time \$TimeNow\"\;\n";
 print pp "system \$copyfiles\;\n\n";
 print pp "\$MakeHTML = sprintf \"python $maindir\/LigoCamHtml.py --cur-time
-          \$TimeNow --cur-utctime $TimeNowUTC\"\;\n";
+          \$TimeNow --run-dir \'$maindir\' --pubhtml-dir \'$pubhtmldir\'
+          --cur-utctime $TimeNowUTC\"\;\n";
 print pp "system \$MakeHTML\;\n\n";
 print pp "\$editfile = sprintf \"python $maindir\/LigoCAMeditCalendar.py
           --cur-time \$TimeNow --ymdh-string $ymdh --hour-string $hour
-          --month-string $month --year-string $year\"\;\n";
+          --month-string $month --pubhtml-dir \'$pubhtmldir\'
+          --year-string $year\"\;\n";
 print pp "system \$editfile\;\n\n";
 print pp "\$sendalertemail = sprintf \"${maindir}/send_email $TimeNowSave
           $TimeNowUTC\"\;\n";
