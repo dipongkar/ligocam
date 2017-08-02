@@ -189,6 +189,7 @@ def do_all_for_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             excess = 'No'
         else:
             excess = 'Yes'
+
     if comb == 'Yes' or disconnect == 'Yes':
         status = 'Alert'
     else:
@@ -291,6 +292,7 @@ def do_all_for_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             excess = 'No'
         else:
             excess = 'Yes'
+
     if comb == 'Yes' or disconnect == 'Yes':
         status = 'Alert'
     else:
@@ -397,6 +399,7 @@ def do_all_for_16385_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             excess = 'No'
         else:
             excess = 'Yes'
+
     if comb == 'Yes' or disconnect == 'Yes':
         status = 'Alert'
     else:
@@ -504,6 +507,7 @@ def do_all_for_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             excess = 'No'
         else:
             excess = 'Yes'
+            
     if comb == 'Yes' or disconnect == 'Yes':
         status = 'Alert'
     else:
@@ -668,15 +672,16 @@ def do_all_for_65537_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             excess = 'No'
         else:
             excess = 'Yes'
+    else:
+        pc_list_1 = [pc_1, pc_2, pc_3]
+        pc_list_2 = [pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11]
+        cond_1 = [x for x in pc_list_1 if x > thd1g or x < thd1l and x > 0]
+        cond_2 = [x for x in pc_list_2 if x > thd2g or x < thd2l and x > 0]
+        if not cond_1 and not cond_2:
+            excess = 'No'
         else:
-            pc_list_1 = [pc_1, pc_2, pc_3]
-            pc_list_2 = [pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11]
-            cond_1 = [x for x in pc_list_1 if x > thd1g or x < thd1l and x > 0]
-            cond_2 = [x for x in pc_list_2 if x > thd2g or x < thd2l and x > 0]
-            if not cond_1 and not cond_2:
-                excess = 'No'
-            else:
-                excess = 'Yes'
+            excess = 'Yes'
+
     if comb == 'Yes' or disconnect == 'Yes':
         status = 'Alert'
     else:
@@ -1126,10 +1131,11 @@ def do_all_for_524289_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             excess = 'No'
         else:
             excess = 'Yes'
-        if comb == 'Yes' or disconnect == 'Yes':
-            status = 'Alert'
-        else:
-            status = 'Ok'
+
+    if comb == 'Yes' or disconnect == 'Yes':
+        status = 'Alert'
+    else:
+        status = 'Ok'
 
     pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
     pltutils.psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, \
