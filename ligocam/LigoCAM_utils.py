@@ -507,7 +507,7 @@ def do_all_for_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
             excess = 'No'
         else:
             excess = 'Yes'
-            
+
     if comb == 'Yes' or disconnect == 'Yes':
         status = 'Alert'
     else:
@@ -983,7 +983,7 @@ def do_all_for_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     if status == 'Ok':
         newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
-            print > >newreffile, item
+            print >> newreffile, item
         newreffile.close()
     else:
         print 'Not saving spectra'
