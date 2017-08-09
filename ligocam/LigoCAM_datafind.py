@@ -6,7 +6,7 @@ parser.add_option("-t", "--cur-time", dest="curGpsTime", type="int",
                   help="Current GPS-start-time", metavar="TIME")
 parser.add_option("-l", "--ifo", dest="observatory", type="string",
                   help="Observatory to LigoCAM", metavar="NAME")
-parser.add_option("-f", "--frame_type", dest="frameType", type="string",
+parser.add_option("-f", "--frame-type", dest="frameType", type="string",
                   help="Frames to LigoCAM", metavar="NAME")
 parser.add_option("-g", "--cache-group", dest="Group", type="string",
                   help="Ref or Curr cache group", metavar="NAME")

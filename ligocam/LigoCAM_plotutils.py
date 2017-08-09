@@ -39,9 +39,9 @@ def timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs):
                                                         '.png', dpi=75)
     fig.clf()
 
-def psdplot_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
-                     f_3, f_4, f_5, p_1, p_2, p_3, p_4, p_5, fb_3, fb_4, fb_5, \
-                     pb_3, pb_4, pb_5, pr_1, pr_2, prb_3, prb_4, prb_5):
+def psdplot_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+                f_1, f_2, f_3, f_4, f_5, p_1, p_2, p_3, p_4, p_5, fb_3, \
+                fb_4, fb_5, pb_3, pb_4, pb_5, pr_1, pr_2, prb_3, prb_4, prb_5):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1, np.sqrt(p_1), 'blue', \
@@ -77,10 +77,10 @@ def psdplot_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1,
     fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
-                     f_3, f_4, f_5, f_6, p_1, p_2, p_3, p_4, p_5, p_6, fb_3, \
-                     fb_4, fb_5, fb_6, pb_3, pb_4, pb_5, pb_6, pr_1, pr_2, \
-                     prb_3, prb_4, prb_5, prb_6):
+def psdplot_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+                  f_1, f_2, f_3, f_4, f_5, f_6, p_1, p_2, p_3, p_4, p_5, p_6, \
+                  fb_3, fb_4, fb_5, fb_6, pb_3, pb_4, pb_5, pb_6, pr_1, pr_2, \
+                  prb_3, prb_4, prb_5, prb_6):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1, np.sqrt(p_1), 'blue', \
@@ -120,11 +120,11 @@ def psdplot_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1,
     fig.savefig(run_Dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
-                      f_1, f_2, f_3, f_4, f_5, f_6, f_7, p_1, p_2, p_3, p_4, \
-                      p_5, p_6, p_7, fb_3, fb_4, fb_5, fb_6, fb_7, pb_3, pb_4, \
-                      pb_5, pb_6, pb_7, pr_1, pr_2, prb_3, prb_4, prb_5, \
-                      prb_6, prb_7):
+def psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, \
+                    strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, p_1, \
+                    p_2, p_3, p_4, p_5, p_6, p_7, fb_3, fb_4, fb_5, fb_6, \
+                    fb_7, pb_3, pb_4, pb_5, pb_6, pb_7, pr_1, pr_2, prb_3, \
+                    prb_4, prb_5, prb_6, prb_7):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1, np.sqrt(p_1), 'blue', \
@@ -167,11 +167,11 @@ def psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTim
     fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
-                  f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, p_1, p_2, p_3, p_4, \
-                  p_5, p_6, p_7, p_8, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, \
-                  pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pr_1, pr_2, prb_3, \
-                  prb_4, prb_5, prb_6, prb_7, prb_8):
+def psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, \
+                  strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, \
+                  p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, fb_3, fb_4, fb_5, \
+                  fb_6, fb_7, fb_8, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pr_1, \
+                  pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1, np.sqrt(p_1), 'blue', \
@@ -214,11 +214,11 @@ def psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTi
     fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, \
-                   f_3, f_4, f_5, f_6, f_7, f_8, f_9, p_1, p_2, p_3, p_4, p_5, \
-                   p_6, p_7, p_8, p_9, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, \
-                   fb_9, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pr_1, pr_2, \
-                   prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9):
+def psdplot_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+                  f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, p_1, p_2, p_3, \
+                  p_4, p_5, p_6, p_7, p_8, p_9, fb_3, fb_4, fb_5, fb_6, fb_7, \
+                  fb_8, fb_9, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pr_1, \
+                  pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1, np.sqrt(p_1), 'blue', \
@@ -261,12 +261,12 @@ def psdplot_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_
     fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
-                Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, p_1, \
-                p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, fb_3, fb_4, \
-                fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, pb_3, pb_4, pb_5, pb_6, \
-                pb_7, pb_8, pb_9, pb_10, pr_1, pr_2, prb_3, prb_4, prb_5, \
-                prb_6, prb_7, prb_8, prb_9, prb_10):
+def psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, \
+                strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, \
+                f_9, f_10, p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, \
+                fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, pb_3, pb_4, \
+                pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pr_1, pr_2, prb_3, prb_4, \
+                prb_5, prb_6, prb_7, prb_8, prb_9, prb_10):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1,np.sqrt(p_1), 'blue', \
@@ -312,13 +312,13 @@ def psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtc
     fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f_1, \
-                   f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11, p_1, \
-                   p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11, fb_3, \
-                   fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, \
-                   pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, pr_1, \
-                   pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, \
-                   prb_10, prb_11):
+def psdplot_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
+                  f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11, \
+                  p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11, \
+                  fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, \
+                  pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, \
+                  pr_1, pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, \
+                  prb_9, prb_10, prb_11):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1,np.sqrt(p_1), 'blue', \
@@ -367,13 +367,13 @@ def psdplot_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, f
     fig.savefig(run_dir + '/images/ASD/' + strcurGpsTime + '/' + x_nn + '.png')
     fig.clf()
 
-def psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
-            Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11a, \
-            f_11b, f_11c, f_11d, f_11e, p_1, p_2, p_3, p_4, p_5, p_6, p_7, \
-            p_8, p_9, p_10, p_11a, p_11b, p_11c, p_11d, p_11e, fb_3, fb_4, \
-            fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, pb_4, pb_5, \
-            pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, pr_1, pr_2, prb_3, prb_4, \
-            prb_5, prb_6, prb_7, prb_8, prb_9, prb_10, prb_11):
+def psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, strcurGpsTime, \
+            strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
+            f_10, f_11a, f_11b, f_11c, f_11d, f_11e, p_1, p_2, p_3, p_4, p_5, \
+            p_6, p_7, p_8, p_9, p_10, p_11a, p_11b, p_11c, p_11d, p_11e, fb_3, \
+            fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, pb_4, \
+            pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, pr_1, pr_2, prb_3, \
+            prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, prb_10, prb_11):
     fig = plt.figure(1, figsize=(10,8))
     plt.subplot(311)
     plt.loglog(f_1, np.sqrt(pr_1), 'red', f_1,np.sqrt(p_1), 'blue', \

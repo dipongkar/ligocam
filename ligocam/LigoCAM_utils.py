@@ -18,6 +18,7 @@
 from __future__ import division
 import numpy as np
 import LigoCAM_plotutils as pltutils
+import os
 
 __author__ = 'Dipongkar Talukder <dipongkar.talukder@ligo.org>'
 
@@ -111,6 +112,16 @@ def get_binned_data(freq, pwr, chunksize):
         freq_binned = np.concatenate((freq_binned, freq_binned_edge), axis=0)
     return freq_binned, pwr_binned
 
+def get_new_ref(run_dir, x_nn, Pxx_r, pb_new):
+    if len(Pxx_r) > len(pb_new):
+        Pxx_r = Pxx_r[0:len(pb_new)]
+    elif len(Pxx_r) < len(pb_new):
+        os.remove(run_dir + '/ref_files/' + x_nn + '.txt')
+    else:
+        pass
+    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    return Pxx_r_new
+
 def do_all_for_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
                                                 data, Fs, freq, Pxx, Pxx_r):
     rng5n = range(1536, 4096)
@@ -130,7 +141,8 @@ def do_all_for_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_1_new = p_1.reshape((-1, 36))
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5), axis=0)
-    Pxx_r_new = Pxx_r + alpha*(pb_new - Pxx_r)
+
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     rng0p3_5 = range(154, 5*512)
     p0p3_5 = Pxx[rng0p3_5]
@@ -195,11 +207,12 @@ def do_all_for_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_4097_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
-                              f_1, f_2, f_3, f_4, f_5, p_1, p_2, p_3, p_4, \
-                              p_5, fb_3, fb_4, fb_5, pb_3, pb_4, pb_5, pr_1, \
-                                                  pr_2, prb_3, prb_4, prb_5)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                    data, Fs)
+    pltutils.psdplot_4097_case(run_dir, x_n, x_nn, strcurGpsTime, \
+                          strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, p_1, \
+                          p_2, p_3, p_4, p_5, fb_3, fb_4, fb_5, pb_3, pb_4, \
+                          pb_5, pr_1, pr_2, prb_3, prb_4, prb_5)
     if status == 'Ok':
         newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
@@ -233,7 +246,7 @@ def do_all_for_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6), \
                                                                      axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     rng0p3_10 = range(154, 10*512)
     p0p3_10 = Pxx[rng0p3_10]
@@ -298,11 +311,12 @@ def do_all_for_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_8193_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
-                        f_1, f_2, f_3, f_4, f_5, f_6, p_1, p_2, p_3, p_4, p_5, \
-                        p_6, fb_3, fb_4, fb_5, fb_6, pb_3, pb_4, pb_5, pb_6, \
-                        pr_1, pr_2, prb_3, prb_4, prb_5, prb_6)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                     data, Fs)
+    pltutils.psdplot_8193_case(run_dir, x_n, x_nn, strcurGpsTime, \
+                      strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, p_1, \
+                      p_2, p_3, p_4, p_5, p_6, fb_3, fb_4, fb_5, fb_6, pb_3, \
+                      pb_4, pb_5, pb_6, pr_1, pr_2, prb_3, prb_4, prb_5, prb_6)
     if status == 'Ok':
         newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
         for item in Pxx_r_new:
@@ -339,7 +353,7 @@ def do_all_for_16385_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0],p_2_new[0],pb_3,pb_4,pb_5,pb_6,pb_7), \
                                                                     axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     rng1_20 = range(512, 20*512)
     p1_20 = Pxx[rng1_20]
@@ -405,7 +419,8 @@ def do_all_for_16385_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                    data, Fs)
     pltutils.psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, \
                       strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, \
                       p_1, p_2, p_3, p_4, p_5, p_6, p_7, fb_3, fb_4, fb_5, \
@@ -448,7 +463,7 @@ def do_all_for_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                                                 pb_7), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     rng1_40 =range(512, 40*512)
     p1_40 = Pxx[rng1_40]
@@ -513,7 +528,8 @@ def do_all_for_32769_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                    data, Fs)
     pltutils.psdplot_16385_and_32769_case(run_dir, x_n, x_nn, strcurGpsTime, \
             strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, p_1, p_2, \
             p_3, p_4, p_5, p_6, p_7, fb_3, fb_4, fb_5, fb_6, fb_7, pb_3, pb_4, \
@@ -557,7 +573,7 @@ def do_all_for_65537_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                                         pb_7, pb_8), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512+1)
@@ -687,7 +703,8 @@ def do_all_for_65537_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                    data, Fs)
     pltutils.psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, p_1, \
              p_2, p_3, p_4, p_5, p_6, p_7, p_8, fb_3, fb_4, fb_5, fb_6, fb_7, \
@@ -732,7 +749,7 @@ def do_all_for_131073_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                                         pb_7, pb_8), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512 + 1)
@@ -813,7 +830,8 @@ def do_all_for_131073_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                    data, Fs)
     pltutils.psdplot_65537_and_131073_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, p_1, \
              p_2, p_3, p_4, p_5, p_6, p_7, p_8, fb_3, fb_4, fb_5, fb_6, fb_7, \
@@ -860,7 +878,7 @@ def do_all_for_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                                     pb_7, pb_8, pb_9), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512 + 1)
@@ -973,12 +991,13 @@ def do_all_for_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_262145_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
-             f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, p_1, p_2, p_3, p_4, \
-             p_5, p_6, p_7, p_8, p_9, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, \
-             fb_9, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pr_1, pr_2, \
-             prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                      data, Fs)
+    pltutils.psdplot_262145_case(run_dir, x_n, x_nn, strcurGpsTime, \
+             strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
+             p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, fb_3, fb_4, fb_5, \
+             fb_6, fb_7, fb_8, fb_9, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, \
+             pr_1, pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9)
 
     if status == 'Ok':
         newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
@@ -1023,7 +1042,7 @@ def do_all_for_524289_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                              pb_7, pb_8, pb_9, pb_10), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512 + 1)
@@ -1137,7 +1156,8 @@ def do_all_for_524289_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                     data, Fs)
     pltutils.psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, \
              strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
              f_10, p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, fb_3, \
@@ -1188,7 +1208,7 @@ def do_all_for_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                             pb_7, pb_8, pb_9, pb_10), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512 + 1)
@@ -1347,7 +1367,8 @@ def do_all_for_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                     data, Fs)
     pltutils.psdplot_524289_and_1048577_case(run_dir, x_n, x_nn, strcurGpsTime, \
             strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
             f_10, p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, fb_3, \
@@ -1400,7 +1421,7 @@ def do_all_for_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                       pb_7, pb_8, pb_9, pb_10, pb_11), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512 + 1)
@@ -1559,13 +1580,14 @@ def do_all_for_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, Fs, \
-            f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11, p_1, p_2, \
-            p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11, fb_3, fb_4, fb_5, \
-            fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, pb_4, pb_5, pb_6, \
-            pb_7, pb_8, pb_9, pb_10, pb_11, pr_1, pr_2, prb_3, prb_4, prb_5, \
-            prb_6, prb_7, prb_8, prb_9, prb_10, prb_11)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                    data, Fs)
+    pltutils.psdplot_2097153_case(run_dir, x_n, x_nn, strcurGpsTime, \
+          strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
+          f_10, f_11, p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, \
+          p_11, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, \
+          pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, pr_1, \
+          pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, prb_10, prb_11)
 
     if status == 'Ok':
         newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
@@ -1622,7 +1644,7 @@ def do_all_for_4194305_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                      pb_7, pb_8, pb_9, pb_10, pb_11), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512 + 1)
@@ -1717,14 +1739,16 @@ def do_all_for_4194305_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, strcurGpsTime, \
-             strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
-             f_10, f_11a, f_11b, f_11c, f_11d, f_11e, p_1, p_2, p_3, p_4, p_5, \
-             p_6, p_7, p_8, p_9, p_10, p_11a, p_11b, p_11c, p_11d, p_11e, \
-             fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, \
-             pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, pr_1, pr_2, \
-             prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, prb_10, prb_11)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                    data, Fs)
+    pltutils.psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, \
+            strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, \
+            f_7, f_8, f_9, f_10, f_11a, f_11b, f_11c, f_11d, f_11e, p_1, p_2, \
+            p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11a, p_11b, p_11c, \
+            p_11d, p_11e, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, \
+            fb_11, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, \
+            pr_1, pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, \
+                                                            prb_10, prb_11)
 
     if status == 'Ok':
         newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')
@@ -1782,7 +1806,7 @@ def do_all_other_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     p_2_new = p_2.reshape((-1, 102))
     pb_new = np.concatenate((p_1_new[0], p_2_new[0], pb_3, pb_4, pb_5, pb_6, \
                                     pb_7, pb_8, pb_9, pb_10, pb_11), axis=0)
-    Pxx_r_new = Pxx_r + alpha * (pb_new - Pxx_r)
+    Pxx_r_new = get_new_ref(run_dir, x_nn, Pxx_r, pb_new)
 
     if '_SEIS_' in x_n:
         rng_seis = range(3*512, 30*512 + 1)
@@ -1878,14 +1902,16 @@ def do_all_other_case(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
     else:
         status = 'Ok'
 
-    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, data, Fs)
-    pltutils.psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, strcurGpsTime, \
-             strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, \
-             f_10, f_11a, f_11b, f_11c, f_11d, f_11e, p_1, p_2, p_3, p_4, p_5, \
-             p_6, p_7, p_8, p_9, p_10, p_11a, p_11b, p_11c, p_11d, p_11e, \
-             fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, fb_11, pb_3, \
-             pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, pr_1, pr_2, \
-             prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, prb_10, prb_11)
+    pltutils.timeseries_plot(run_dir, x_n, x_nn, strcurGpsTime, strcurUtcTime, \
+                                                                     data, Fs)
+    pltutils.psdplot_4194305_and_allother_case(run_dir, x_n, x_nn, \
+             strcurGpsTime, strcurUtcTime, Fs, f_1, f_2, f_3, f_4, f_5, f_6, \
+             f_7, f_8, f_9, f_10, f_11a, f_11b, f_11c, f_11d, f_11e, p_1, p_2, \
+             p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11a, p_11b, p_11c, \
+             p_11d, p_11e, fb_3, fb_4, fb_5, fb_6, fb_7, fb_8, fb_9, fb_10, \
+             fb_11, pb_3, pb_4, pb_5, pb_6, pb_7, pb_8, pb_9, pb_10, pb_11, \
+             pr_1, pr_2, prb_3, prb_4, prb_5, prb_6, prb_7, prb_8, prb_9, \
+                                                            prb_10, prb_11)
 
     if status == 'Ok':
         newreffile = open(run_dir + '/ref_files/' + x_nn + '.txt', 'w')

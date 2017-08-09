@@ -270,10 +270,12 @@ if file_size > 2000:
     ff = open(run_dir + "/results/Result_sorted_2_" + str(options.curGpsTime) + \
                                                                    ".txt", "r")
     for line in ff.readlines():
-        LChtmlUtil.ligocam_makehtml_status(pubhtml_dir, line, strcurUtcTime, curGpsTime)
+        LChtmlUtil.ligocam_makehtml_status(pubhtml_dir, line, strcurUtcTime, \
+                                                                   curGpsTime)
     fulldata = open(run_dir + "/channel_full.txt", "r")
     for chan in fulldata.readlines():
-        LChtmlUtil.ligocam_makehtml_status_nodata(run_dir, pubhtml_dir, chan, curGpsTime)
+        LChtmlUtil.ligocam_makehtml_status_nodata(run_dir, pubhtml_dir, chan, \
+                                                                   curGpsTime)
     fulldata.close()
     ff.close()
 else:
