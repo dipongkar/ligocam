@@ -14,7 +14,7 @@ PUBHTML_DIR=${HOME}/public_html/${BASEDIR}/${SUBSYS}
 mkdir -p $RUN_DIR
 mkdir -p $PUBHTML_DIR
 mkdir -p $SCRATCH_DIR
-mkdir -p $RUN_DIR/{jobs,cache,config_file,ref_files,results}
+mkdir -p $RUN_DIR/{jobs,cache,config_files,ref_files,results,pages}
 mkdir -p $RUN_DIR/images/{TS,ASD}
 
 GIT_DIR=$(pwd)/GIT
@@ -24,7 +24,7 @@ git clone https://github.com/dipongkar/ligocam $GIT_DIR
 cp -r $GIT_DIR/ligocam/*.py $RUN_DIR
 cp -r $GIT_DIR/bin/LigoCAM $RUN_DIR
 cp -r $GIT_DIR/etc/{dag.pl,send_email} $RUN_DIR
-cp -r $GIT_DIR/etc/config_files/${SUBSYS}/${OBS}/channelList*.txt $RUN_DIR/config_file
+cp -r $GIT_DIR/etc/config_files/${SUBSYS}/${OBS}/channelList*.txt $RUN_DIR/config_files
 cp -r $GIT_DIR/etc/config_files/${SUBSYS}/${OBS}/channel_files.txt $RUN_DIR
 cp -r $GIT_DIR/share/{DAQfailure_default.txt,Disconnected_default.txt} $RUN_DIR/results
 
