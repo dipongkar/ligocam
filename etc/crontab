@@ -1,5 +1,0 @@
-45 * * * * /home/dtalukder/Projects/detchar/LigoCAM/PEM/cron_job.sh
-
-45 * * * * /home/dtalukder/Projects/detchar/LigoCAM/SUS/cron_job.sh
-
-45 * * * * /home/dtalukder/Projects/detchar/LigoCAM/ISI/cron_job.sh
