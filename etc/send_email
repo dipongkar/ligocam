@@ -7,8 +7,8 @@ $utcTime =~ s/_/ /g;
 
 ###### Change to point yours ######
 
-$RunDir = sprintf "/home/dtalukder/test/ligocam_test/LigoCAM";
-$URL = sprintf "https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/test/ligocam_test/pages/LigoCamHTML_%s.html", $gpsTime;
+$RunDir = sprintf "/home/dtalukder/test/ligocam_test/LigoCAM/PEM";
+$URL = sprintf "https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/test/ligocam_test/LigoCAM/PEM/pages/LigoCamHTML_%s.html", $gpsTime;
 $emailfrom = "LigoCAM <dtalukder\@ldas-grid.ligo-wa.caltech.edu>";
 $replyto  = "Dipongkar Talukder <talukderd\@gmail.com>";
 

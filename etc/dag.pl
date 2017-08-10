@@ -2,12 +2,12 @@
 
 ###### Change to point yours ######
 
-$rundir = "/home/dtalukder/test/ligocam_test/LigoCAM";
-$pubhtmldir = "/home/dtalukder/public_html/test/ligocam_test";
+$rundir = "/home/dtalukder/test/ligocam_test/LigoCAM/PEM";
+$pubhtmldir = "/home/dtalukder/public_html/test/ligocam_test/LigoCAM/PEM";
 $scratchdir = "/usr1/dtalukder/log/ligocam";
 $user = "dipongkar.talukder";
-$group = "ligo.prod.o1.detchar.chan_mon.ligocam";
-$url = "https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/test/ligocam_test";
+$group = "ligo.prod.o2.detchar.chan_mon.ligocam";
+$url = "https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/test/ligocam_test/LigoCAM/PEM";
 
 ###################################
 
