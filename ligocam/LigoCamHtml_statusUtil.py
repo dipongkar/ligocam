@@ -1,6 +1,6 @@
 import LigoCamHtmlLib as CamHtml
 
-def ligocam_makehtml_status(pubhtml_dir, line, strcurUtcTime, curGpsTime):
+def ligocam_makehtml_status(puburl, pubhtml_dir, line, strcurUtcTime, curGpsTime):
     t = CamHtml.Table(header_row=[CamHtml.TableCell('Channel name', \
                 width='31%', header=True), CamHtml.TableCell('STATUS', \
                 width='7%', header=True), CamHtml.TableCell('Disconnected?', \
@@ -159,12 +159,10 @@ def ligocam_makehtml_status(pubhtml_dir, line, strcurUtcTime, curGpsTime):
         status = CamHtml.TableCell('ALERT', bgcolor='FFFF00', width='7%')
     else:
         status = CamHtml.TableCell('OK', bgcolor='00FF00', width='7%')
-    image = ('<a href=" \
-            https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/Projects/detchar/LigoCAM/PEM/images/ASD/%s/%s" \
-            target="_blank">ASD</a>, <a href=" \
-            https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/Projects/detchar/LigoCAM/PEM/images/TS/%s/%s" \
-            target="_blank">TS</a>' % (curGpsTime, chan_rn + '.png', \
-            curGpsTime, chan_rn + '.png'))
+    image = ('<a href="%s/images/ASD/%s/%s" target="_blank">ASD</a>, <a href=" \
+            %s/images/TS/%s/%s" target="_blank">TS</a>' % \
+                           (puburl, curGpsTime, chan_rn + '.png', \
+                            puburl, curGpsTime, chan_rn + '.png'))
     image = CamHtml.TableCell(image, bgcolor='white', width='4%')
     chan = CamHtml.TableCell(chan, bgcolor='white', width='31%')
     t.rows.append([chan, status, disconnect, comb, excess, band1, band2, \

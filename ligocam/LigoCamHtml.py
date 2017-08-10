@@ -32,6 +32,8 @@ parser.add_option("-d", "--run-dir", dest="runDir", type="string",
                   help="Run directory", metavar="NAME")
 parser.add_option("-p", "--pubhtml-dir", dest="pubhtmlDir", type="string",
                   help="PublicHTML directory", metavar="NAME")
+parser.add_option("-U", "--pub-url", dest="pubUrl", type="string",
+                  help="Public URL", metavar="NAME")
 (options, args) = parser.parse_args()
 
 strcurUtcTime = options.curUtcTime
@@ -39,6 +41,7 @@ strcurUtcTime = strcurUtcTime.replace('_', ' ')
 curGpsTime = options.curGpsTime
 run_dir = options.runDir
 pubhtml_dir = options.pubhtmlDir
+puburl = options.pubUrl
 
 # open an HTML file to show output in a browser
 HTMLFILE = run_dir + '/pages/LigoCamHTML_sorted_2_' + str(options.curGpsTime) + \
@@ -207,12 +210,10 @@ for line in ff.readlines():
         status = CamHtml.TableCell(status, bgcolor='FFFF00', width='4%')
     else:
         status = CamHtml.TableCell(status, bgcolor='00FF00', width='4%')
-    image = ('<a href=" \
-            https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/Projects/detchar/LigoCAM/PEM/images/ASD/%s/%s" \
-            target="_blank">ASD</a>, <a href=" \
-            https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/Projects/detchar/LigoCAM/PEM/images/TS/%s/%s" \
-            target="_blank">TS</a>' % (options.curGpsTime, chan_rn + '.png', \
-            options.curGpsTime, chan_rn + '.png'))
+    image = ('<a href="%s/images/ASD/%s/%s" target="_blank">ASD</a>, <a href=" \
+            %s/images/TS/%s/%s" target="_blank">TS</a>' % \
+                        (puburl, options.curGpsTime, chan_rn + '.png', \
+                         puburl, options.curGpsTime, chan_rn + '.png'))
     image = CamHtml.TableCell(image, bgcolor='white', width='5%')
     info = ('<a href="\
              http://pem.ligo.org/channelinfo/index.php?channelname=%s" \
@@ -270,8 +271,8 @@ if file_size > 2000:
     ff = open(run_dir + "/results/Result_sorted_2_" + str(options.curGpsTime) + \
                                                                    ".txt", "r")
     for line in ff.readlines():
-        LChtmlUtil.ligocam_makehtml_status(pubhtml_dir, line, strcurUtcTime, \
-                                                                   curGpsTime)
+        LChtmlUtil.ligocam_makehtml_status(puburl, pubhtml_dir, line, \
+                                               strcurUtcTime, curGpsTime)
     fulldata = open(run_dir + "/channel_full.txt", "r")
     for chan in fulldata.readlines():
         LChtmlUtil.ligocam_makehtml_status_nodata(run_dir, pubhtml_dir, chan, \

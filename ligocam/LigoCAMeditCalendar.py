@@ -17,6 +17,8 @@ parser.add_option("-y", "--year-string", dest="yearstring", type="string",
                   help="Current year", metavar="TIME")
 parser.add_option("-p", "--pubhtml-dir", dest="pubhtmlDir", type="string",
                   help="PublicHTML directory", metavar="NAME")
+parser.add_option("-U", "--pub-url", dest="pubUrl", type="string",
+                  help="Public URL", metavar="NAME")
 (options, args) = parser.parse_args()
 
 pubhtml_dir = options.pubhtmlDir
@@ -25,12 +27,13 @@ ymdhstring = options.ymdhstring
 hourstring = options.hourstring
 monthstring = options.monthstring
 yearstring = options.yearstring
+puburl = options.pubUrl
 
 stringold = '<!-- ' + ymdhstring + ' --> <li class="sgrayl l1"><p>' + \
                                                  hourstring + ':00</p></li>'
-stringnew = '<li class="greenish l1"><p><a href="' + \
-           'https://ldas-jobs.ligo-wa.caltech.edu/~dtalukder/Projects/detchar/LigoCAM/PEM/pages/LigoCamHTML_' \
-           + strcurGpsTime + '.html">' + hourstring + ':00</a></p></li>'
+stringnew = '<li class="greenish l1"><p><a href="' + puburl + \
+           '/pages/LigoCamHTML_' + strcurGpsTime + '.html">' + \
+                               hourstring + ':00</a></p></li>'
 html_file = pubhtml_dir + '/calendar/LigoCAM_' + monthstring + '_' + \
                                                  yearstring + '.html'
 html_file_temp = pubhtml_dir + '/calendar/LigoCAM_' + monthstring + '_' + \
