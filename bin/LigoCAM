@@ -133,7 +133,7 @@ for x in chan:
         LCutils.do_all_for_65537_case(run_dir, x_n, x_nn, strcurGpsTime, \
         strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
     elif len(Pxx) == 131073:
-        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11,
+        pc_1, pc_2, pc_3, pc_4, pc_5, pc_6, pc_7, pc_8, pc_9, pc_10, pc_11, \
         excess, comb, disconnect, status, disconhour, daqfailhour = \
         LCutils.do_all_for_131073_case(run_dir, x_n, x_nn, strcurGpsTime, \
         strcurUtcTime, data, Fs, freq, Pxx, Pxx_r)
