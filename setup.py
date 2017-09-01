@@ -31,8 +31,6 @@ setup(
 	license='GNU General Public License Version 3',
 	packages=['ligocam'],
 	scripts=[
-		'bin/LigoCAM',
-		'bin/send_email',
-		'bin/dag.pl'
+		'bin/LigoCAM'
 	]
 )
